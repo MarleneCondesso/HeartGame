@@ -1,0 +1,101 @@
+.reasons {
+  min-height: 100vh;
+  padding: 20px;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 14px;
+}
+
+.reasons__header {
+  display: flex;
+  gap: 14px;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+
+  padding: 14px;
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px);
+}
+
+.reasons__kicker { margin: 0; opacity: 0.9; }
+.reasons__title { margin: 0; font-size: 26px; }
+.reasons__subtitle { margin: 6px 0 0; opacity: 0.8; }
+
+.reasons__headerActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.reasons__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.reasonCard {
+  text-align: left;
+  border-radius: 18px;
+  padding: 14px;
+  cursor: pointer;
+
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+}
+
+.reasonCard:hover { transform: translateY(-1px); }
+
+.reasonCard__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.reasonCard__index {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.12);
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.reasonCard__hint { font-size: 12px; opacity: 0.75; }
+
+.reasonCard__body {
+  min-height: 72px;
+  display: grid;
+  place-items: center;
+}
+
+.reasonCard__text { margin: 0; line-height: 1.45; opacity: 0.95; }
+.reasonCard__mask { margin: 0; letter-spacing: 2px; opacity: 0.5; }
+
+.reasonCard--on { background: rgba(255, 255, 255, 0.10); }
+.reasonCard--highlight { border-color: rgba(255, 255, 255, 0.40); }
+
+.reasons__footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.reasons__next {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.reasons__nextLabel { opacity: 0.8; }

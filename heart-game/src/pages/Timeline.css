@@ -1,0 +1,119 @@
+.timeline {
+  min-height: 100vh;
+  padding: 20px;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 14px;
+}
+
+.timeline__header {
+  display: flex;
+  gap: 14px;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+
+  padding: 14px;
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px);
+}
+
+.timeline__kicker { margin: 0; opacity: 0.9; }
+.timeline__title { margin: 0; font-size: 26px; }
+.timeline__subtitle { margin: 6px 0 0; opacity: 0.8; line-height: 1.45; }
+
+.timeline__headerActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.timeline__rail {
+  position: relative;
+  padding-left: 22px;
+}
+
+.timeline__rail::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+}
+
+.timelineCard {
+  position: relative;
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  gap: 12px;
+  margin: 0 0 12px;
+}
+
+.timelineCard__dot {
+  width: 14px;
+  height: 14px;
+  margin-top: 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.22);
+}
+
+.timelineCard__content {
+  padding: 14px;
+  border-radius: 18px;
+
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px);
+
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+}
+
+.timelineCard__content:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.10);
+}
+
+.timelineCard__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.timelineCard__date {
+  font-size: 12px;
+  opacity: 0.8;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,  255, 255, 0.18);
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.timelineCard__emoji { font-size: 18px; opacity: 0.95; }
+.timelineCard__title { margin: 0 0 8px; font-size: 18px; }
+.timelineCard__text { margin: 0; opacity: 0.85; line-height: 1.5; }
+
+.timeline__footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.timeline__next {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.timeline__nextLabel { opacity: 0.8; }

@@ -1,0 +1,124 @@
+.gamePage {
+  min-height: 100vh;
+  padding: 20px;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 14px;
+}
+
+.gameHeader {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.title h1 {
+  margin: 0;
+  font-size: 22px;
+}
+.title p {
+  margin: 6px 0 0;
+  opacity: 0.8;
+}
+
+.badge {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.18);
+  padding: 8px 10px;
+  border-radius: 14px;
+  backdrop-filter: blur(8px);
+  white-space: nowrap;
+}
+
+.stats {
+  display: flex;
+  gap: 8px;
+}
+
+.gameArea {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.06);
+  min-height: 420px;
+}
+
+.heart {
+  position: absolute;
+  top: -60px;
+  transform: translateX(-50%);
+  display: grid;
+  place-items: center;
+  border: none;
+  background: transparent;
+  font-size: 34px;
+  cursor: pointer;
+  user-select: none;
+  animation-name: fall;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+  filter: drop-shadow(0 10px 10px rgba(0,0,0,0.25));
+}
+
+@keyframes fall {
+  from { top: -60px; opacity: 1; }
+  to   { top: calc(100% + 60px); opacity: 0.95; }
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+}
+
+.panel {
+  width: min(420px, 92%);
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(20,20,20,0.65);
+  border: 1px solid rgba(255,255,255,0.18);
+}
+
+.panel h2 {
+  margin: 0 0 8px;
+}
+
+.panel p {
+  margin: 0 0 14px;
+  opacity: 0.9;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.16);
+  cursor: pointer;
+}
+
+.btn.ghost {
+  background: transparent;
+}
+
+.gameFooter {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.linkBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  opacity: 0.85;
+}
