@@ -22,20 +22,23 @@ Importante:
 ### Backend (Vercel Functions) + Fotos protegidas
 
 As rotas em `api/*` exigem sessão (cookie httpOnly) e servem:
-- `/api/private` — devolve o conteúdo privado (`PRIVATE_CONTENT_JSON`)
-- `/api/photo?id=...` — devolve fotos via proxy (`PRIVATE_PHOTO_MAP_JSON`)
+- `/api/private` — devolve o conteúdo privado (`PRIVATE_CONTENT_URL` ou `PRIVATE_CONTENT_JSON`)
+- `/api/photo?id=...` — devolve fotos via proxy (`PRIVATE_PHOTO_MAP_URL` ou `PRIVATE_PHOTO_MAP_JSON`)
 
 Para configurares:
-1. Define env vars no host (ex.: Vercel): `AUTH_SECRET`, `PRIVATE_USERNAME`, `PRIVATE_PASSWORD`, `PRIVATE_CONTENT_JSON`, `PRIVATE_PHOTO_MAP_JSON`
-2. Gera o JSON do conteúdo privado (a partir de `private-content.json`):
+1. Define env vars no host (ex.: Vercel): `AUTH_SECRET`, `PRIVATE_USERNAME`, `PRIVATE_PASSWORD`
+2. (Recomendado) Faz upload do conteúdo privado para o Blob e copia o URL:
    ```bash
-   node scripts/print-private-content.mjs
+   node scripts/upload-private-content.mjs
    ```
+   Depois define `PRIVATE_CONTENT_URL` no host.
 3. Faz upload das fotos para o Blob e gera o mapa:
    ```bash
    node scripts/upload-private-photos.mjs
    ```
-   O script imprime o JSON para copiares para as env vars.
+   O script imprime `PRIVATE_PHOTO_MAP_URL` (recomendado) e também `PRIVATE_PHOTO_MAP_JSON` (fallback).
+
+Nota: `PRIVATE_CONTENT_JSON` e `PRIVATE_PHOTO_MAP_JSON` podem não caber em env vars (limite das Functions). Usa `*_URL` quando possível.
 
 ## Rodar localmente
 

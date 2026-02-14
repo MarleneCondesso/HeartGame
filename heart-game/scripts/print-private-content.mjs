@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { Buffer } from "node:buffer";
 
 const file = path.resolve(process.cwd(), "private-content.json");
 
@@ -27,12 +28,21 @@ async function main() {
     process.exit(1);
   }
 
+  const out = JSON.stringify(data);
+
   console.log("COPIA ISTO PARA PRIVATE_CONTENT_JSON:");
-  console.log(JSON.stringify(data));
+  console.log(out);
+
+  const bytes = Buffer.byteLength(out, "utf8");
+  console.error(`INFO: PRIVATE_CONTENT_JSON size = ${bytes} bytes`);
+  if (bytes > 3500) {
+    console.error(
+      "AVISO: isto pode não caber em env vars nas Vercel Functions. Usa `node scripts/upload-private-content.mjs` e define `PRIVATE_CONTENT_URL`."
+    );
+  }
 }
 
 main().catch((err) => {
   console.error("❌ Erro:", err);
   process.exit(1);
 });
-
