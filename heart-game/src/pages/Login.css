@@ -1,17 +1,17 @@
 .login {
-  min-height: 100vh;
   display: grid;
   place-items: center;
-  padding: 20px;
+  padding: var(--page-pad);
+  padding-bottom: calc(var(--page-pad) + env(safe-area-inset-bottom));
 }
 
 .login__card {
   width: min(420px, 100%);
   padding: 16px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(10px);
+  border-radius: var(--card-radius);
+  background: var(--card-bg);
+  border: var(--card-border);
+  backdrop-filter: var(--card-blur);
 }
 
 .login__title {
@@ -41,9 +41,14 @@
   padding: 10px 12px;
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.18);
   color: inherit;
   outline: none;
+}
+
+.login__input:focus {
+  border-color: rgba(var(--matcha-rgb), 0.55);
+  box-shadow: 0 0 0 3px rgba(var(--matcha-rgb), 0.14);
 }
 
 .login__error {

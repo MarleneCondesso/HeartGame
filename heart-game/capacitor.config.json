@@ -1,0 +1,7 @@
+{
+  "appId": "com.valentinedays.heartgame",
+  "appName": "LoveCard",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}
+

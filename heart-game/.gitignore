@@ -22,3 +22,19 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local artifacts
+output
+
+# Private assets (não commitar)
+private-photos/
+public/photos/
+
+# Private content (não commitar)
+private-content.json
+private-content.*.json
+
+# Env files (secrets)
+.env
+.env.*
+!.env.example

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">LoveCard</string>
+    <string name="title_activity_main">LoveCard</string>
+    <string name="package_name">com.valentinedays.heartgame</string>
+    <string name="custom_url_scheme">com.valentinedays.heartgame</string>
+</resources>

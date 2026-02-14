@@ -2,15 +2,85 @@
 
 :root {
   color-scheme: dark;
+  --matcha: #a8d5ba;
+  --sofia: #ffb6b9;
+  --matcha-rgb: 168, 213, 186;
+  --sofia-rgb: 255, 182, 185;
+
+  --accent-gradient: linear-gradient(135deg,
+      rgba(var(--sofia-rgb), 0.95),
+      rgba(var(--matcha-rgb), 0.92));
+  --accent-soft: linear-gradient(135deg,
+      rgba(var(--sofia-rgb), 0.14),
+      rgba(var(--matcha-rgb), 0.10));
+
+  --page-pad: 20px;
+  --card-radius: 18px;
+  --card-border: 1px solid rgba(255, 255, 255, 0.16);
+  --card-bg: rgba(255, 255, 255, 0.06);
+  --card-blur: blur(10px);
+}
+
+@media (max-width: 420px) {
+  :root {
+    --page-pad: 16px;
+  }
+}
+
+html,
+body {
+  min-height: 100%;
 }
 
 body {
   margin: 0;
   color: rgba(255, 255, 255, 0.92);
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  background: #0b0b10;
+  min-height: 100%;
+  background:
+    radial-gradient(circle at 10% -10%, rgba(var(--sofia-rgb)), transparent 56%),
+    radial-gradient(circle at 95% 120%, rgba(var(--matcha-rgb)), transparent 60%);
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+#root {
+  min-height: 100%;
 }
 
 * {
   box-sizing: border-box;
+}
+
+.appShell {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+.appMain {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+.appMain>main {
+  flex: 1;
+  min-height: 0;
+}
+
+:where(a, button, input, textarea, select) {
+  font: inherit;
+  color: inherit;
+}
+
+:where(a, button) {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(a, button):focus-visible {
+  outline: 2px solid rgba(var(--matcha-rgb), 0.75);
+  outline-offset: 2px;
 }

@@ -16,11 +16,10 @@ export const demoContent = {
     { date: "2024-06-10", title: "Um dia leve", text: "Outro exemplo de momento.", emoji: "🌿" },
     { date: "2025-02-14", title: "Dia dos Namorados", text: "Exemplo de celebração.", emoji: "💝" },
   ],
-  gallery: [
-    { src: "/photos/01.jpg", alt: "Foto demo 1" },
-    { src: "/photos/02.jpg", alt: "Foto demo 2" },
-    { src: "/photos/03.jpg", alt: "Foto demo 3" },
-  ],
+  gallery: Array.from({ length: 9 }, (_, i) => ({
+    src: `/demo-photos/${String(i + 1).padStart(2, "0")}.svg`,
+    alt: `Foto demo ${i + 1}`,
+  })),
   quiz: [
     {
       question: "Qual é a vibe perfeita?",
@@ -33,6 +32,43 @@ export const demoContent = {
       correctIndex: 3,
     },
   ],
+  connections: {
+    title: "Connections (DEMO)",
+    subtitle: "Create four groups of four!",
+    groups: [
+      {
+        id: "feelings",
+        title: "CARINHO",
+        color: "yellow",
+        words: ["Abraço", "Beijo", "Mimo", "Saudade"],
+      },
+      {
+        id: "tech",
+        title: "TECH",
+        color: "blue",
+        words: ["React", "Vite", "Router", "Capacitor"],
+      },
+      {
+        id: "cozy",
+        title: "COZY",
+        color: "green",
+        words: ["Sofá", "Filme", "Chá", "Cobertor"],
+      },
+      {
+        id: "treats",
+        title: "TREATS",
+        color: "purple",
+        words: ["Matcha", "Gomas", "Pizza", "Sushi"],
+      },
+    ],
+  },
+  strands: {
+    title: "Strands (DEMO)",
+    theme: "XOXOXO",
+    hint: "Diz com carinho",
+    spangram: "xoxoxo",
+    words: ["Love", "Heart", "Hug", "Kiss", "Cozy", "Matcha", "Rose"],
+  },
   final: {
     title: "Surpresa (DEMO) 💝",
     message:

@@ -1,6 +1,6 @@
 .quiz {
-  min-height: 100vh;
-  padding: 20px;
+  padding: var(--page-pad);
+  padding-bottom: calc(var(--page-pad) + env(safe-area-inset-bottom));
   display: grid;
   grid-template-rows: auto 1fr auto;
   gap: 14px;
@@ -14,11 +14,11 @@
   flex-wrap: wrap;
 
   padding: 14px;
-  border-radius: 18px;
+  border-radius: var(--card-radius);
 
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(10px);
+  background: var(--card-bg);
+  border: var(--card-border);
+  backdrop-filter: var(--card-blur);
 }
 
 .quiz__kicker { margin: 0; opacity: 0.9; }
@@ -35,9 +35,9 @@
 
 .quiz__progress {
   padding: 12px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--card-radius);
+  background: var(--card-bg);
+  border: var(--card-border);
 }
 
 .quiz__progressTop {
@@ -64,20 +64,20 @@
   border-radius: 999px;
 }
 .quiz__progressBar::-webkit-progress-value {
-  background: rgba(255, 255, 255, 0.28);
+  background: var(--accent-gradient);
   border-radius: 999px;
 }
 .quiz__progressBar::-moz-progress-bar {
-  background: rgba(255, 255, 255, 0.28);
+  background: var(--accent-gradient);
   border-radius: 999px;
 }
 
 .quizCard {
   padding: 14px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(10px);
+  border-radius: var(--card-radius);
+  background: var(--card-bg);
+  border: var(--card-border);
+  backdrop-filter: var(--card-blur);
 }
 
 .quizCard__question { margin: 0 0 12px; font-size: 18px; }
@@ -99,15 +99,28 @@
   padding: 12px;
   border-radius: 16px;
 
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: linear-gradient(
+    135deg,
+    rgba(var(--sofia-rgb), 0.10),
+    rgba(var(--matcha-rgb), 0.06)
+  );
   color: inherit;
 
   cursor: pointer;
   transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
 }
 
-.option:hover { transform: translateY(-1px); background: rgba(255, 255, 255, 0.10); }
+@media (hover: hover) and (pointer: fine) {
+  .option:hover {
+    transform: translateY(-1px);
+    background: linear-gradient(
+      135deg,
+      rgba(var(--sofia-rgb), 0.16),
+      rgba(var(--matcha-rgb), 0.10)
+    );
+  }
+}
 
 .option__bullet {
   width: 12px;
@@ -118,8 +131,12 @@
 }
 
 .option--selected {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.30);
+  background: linear-gradient(
+    135deg,
+    rgba(var(--sofia-rgb), 0.24),
+    rgba(var(--matcha-rgb), 0.18)
+  );
+  border-color: rgba(var(--matcha-rgb), 0.42);
 }
 
 .option--selected .option__bullet { background: rgba(255, 255, 255, 0.28); }
@@ -135,10 +152,10 @@
 
 .resultCard {
   padding: 14px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(10px);
+  border-radius: var(--card-radius);
+  background: var(--card-bg);
+  border: var(--card-border);
+  backdrop-filter: var(--card-blur);
 }
 
 .resultCard__title { margin: 0 0 10px; font-size: 20px; }
@@ -153,8 +170,12 @@
 .pill {
   padding: 8px 10px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: linear-gradient(
+    135deg,
+    rgba(var(--sofia-rgb), 0.16),
+    rgba(var(--matcha-rgb), 0.12)
+  );
   opacity: 0.95;
 }
 

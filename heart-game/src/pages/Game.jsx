@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Game.css";
 
@@ -9,28 +9,104 @@ function clamp(n, min, max) {
 export default function Game() {
   const navigate = useNavigate();
 
-  const GOAL = 15;          // pontos para ganhar
-  const GAME_SECONDS = 25;  // duração do jogo
-  const SPAWN_MS = 550;     // frequência de corações
+  const isE2E =
+    typeof window !== "undefined" &&
+    typeof window.location?.search === "string" &&
+    new URLSearchParams(window.location.search).has("e2e");
+
+  const GOAL = isE2E ? 3 : 15; // pontos para ganhar
+  const GAME_SECONDS = isE2E ? 12 : 25; // duração do jogo
+  const SPAWN_MS = isE2E ? 999999 : 550; // frequência de corações
 
   const [hearts, setHearts] = useState([]);
   const [score, setScore] = useState(0);
   const [missed, setMissed] = useState(0);
   const [secondsLeft, setSecondsLeft] = useState(GAME_SECONDS);
 
-  // ✅ status DERIVADO (sem setStatus em effects)
+  // status DERIVADO (sem setStatus em effects)
   const status =
     score >= GOAL ? "won" : secondsLeft <= 0 ? "lost" : "playing";
 
   const nextId = useRef(1);
   const containerRef = useRef(null);
+  const canvasRef = useRef(null);
 
-  // ✅ Side-effect “externo” ok: localStorage
+  const spawnE2EHeart = useCallback(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const rect = el.getBoundingClientRect();
+    const size = 92;
+    const duration = 9999;
+    const x = rect.width / 2;
+
+    setHearts([{ id: nextId.current++, x, size, duration, static: true }]);
+  }, []);
+
+  useEffect(() => {
+    const fn = () =>
+      JSON.stringify({
+        route: "/game",
+        status,
+        goal: GOAL,
+        score,
+        missed,
+        secondsLeft,
+        heartsOnScreen: hearts.length,
+        coords: {
+          origin: "top-left of gameArea",
+          units: "px",
+        },
+      });
+    window.render_game_to_text = fn;
+    return () => {
+      if (window.render_game_to_text === fn) delete window.render_game_to_text;
+    };
+  }, [GOAL, hearts.length, missed, score, secondsLeft, status]);
+
+  // Canvas "âncora" (screenshots + ações por coordenadas no client do Playwright)
+  useEffect(() => {
+    const el = containerRef.current;
+    const canvas = canvasRef.current;
+    if (!el || !canvas) return;
+
+    const resize = () => {
+      const rect = el.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+
+      canvas.width = Math.max(1, Math.round(rect.width * dpr));
+      canvas.height = Math.max(1, Math.round(rect.height * dpr));
+
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, rect.width, rect.height);
+      }
+    };
+
+    resize();
+
+    let ro = null;
+    if (typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(resize);
+      ro.observe(el);
+    }
+
+    window.addEventListener("resize", resize);
+    return () => {
+      window.removeEventListener("resize", resize);
+      ro?.disconnect();
+    };
+  }, []);
+
+  // Side-effect “externo” ok: localStorage
   useEffect(() => {
     if (status === "won") {
       localStorage.setItem("sofia_game_won", "1");
     } else if (status === "lost") {
       localStorage.removeItem("sofia_game_won");
+      localStorage.removeItem("sofia_connections_won");
+      localStorage.removeItem("sofia_strands_won");
     }
   }, [status]);
 
@@ -55,15 +131,42 @@ export default function Game() {
   useEffect(() => {
     if (status !== "playing") return;
 
+    if (isE2E) {
+      spawnE2EHeart();
+      return;
+    }
+
     const spawn = () => {
       const el = containerRef.current;
       if (!el) return;
 
       const rect = el.getBoundingClientRect();
-      const x = Math.random() * rect.width;
 
-      const size = clamp(28 + Math.random() * 26, 28, 54);
-      const duration = clamp(2.7 + Math.random() * 1.7, 2.6, 4.8);
+      const isCoarsePointer =
+        typeof window !== "undefined" &&
+        typeof window.matchMedia === "function" &&
+        window.matchMedia("(pointer: coarse)").matches;
+
+      const minSize = isCoarsePointer ? 44 : 28;
+      const maxSize = isCoarsePointer ? 72 : 54;
+      const size = clamp(
+        minSize + Math.random() * (maxSize - minSize),
+        minSize,
+        maxSize
+      );
+
+      const minDuration = isCoarsePointer ? 3.2 : 2.6;
+      const maxDuration = isCoarsePointer ? 5.6 : 4.8;
+      const duration = clamp(
+        minDuration + Math.random() * (maxDuration - minDuration),
+        minDuration,
+        maxDuration
+      );
+
+      const x =
+        rect.width <= size
+          ? rect.width / 2
+          : clamp(Math.random() * rect.width, size / 2, rect.width - size / 2);
 
       const heart = { id: nextId.current++, x, size, duration };
       setHearts((prev) => [...prev, heart]);
@@ -71,7 +174,17 @@ export default function Game() {
 
     const t = setInterval(spawn, SPAWN_MS);
     return () => clearInterval(t);
-  }, [status]);
+  }, [SPAWN_MS, isE2E, spawnE2EHeart, status]);
+
+  // E2E helper: spawna 1 coração sempre no centro até chegar ao objetivo
+  useEffect(() => {
+    if (!isE2E) return;
+    if (status !== "playing") return;
+    if (score >= GOAL) return;
+    if (hearts.length) return;
+
+    spawnE2EHeart();
+  }, [GOAL, hearts.length, isE2E, score, spawnE2EHeart, status]);
 
   // Timer (só enquanto está a jogar)
   useEffect(() => {
@@ -90,6 +203,8 @@ export default function Game() {
     setMissed(0);
     setSecondsLeft(GAME_SECONDS);
     localStorage.removeItem("sofia_game_won");
+    localStorage.removeItem("sofia_connections_won");
+    localStorage.removeItem("sofia_strands_won");
   };
 
   return (
@@ -100,7 +215,7 @@ export default function Game() {
         <div className="title">
           <h1>Apanha os Corações</h1>
           <p>
-            Chega a <b>{GOAL}</b> para desbloquear a surpresa 💝
+            Chega a <b>{GOAL}</b> para desbloquear o próximo jogo 💛
           </p>
         </div>
 
@@ -111,6 +226,8 @@ export default function Game() {
       </div>
 
       <div className="gameArea" ref={containerRef}>
+        <canvas className="gameCanvas" ref={canvasRef} aria-hidden="true" />
+
         {hearts.map((h) => (
           <button
             key={h.id}
@@ -120,13 +237,20 @@ export default function Game() {
               width: `${h.size}px`,
               height: `${h.size}px`,
               animationDuration: `${h.duration}s`,
+              ...(h.static
+                ? {
+                    top: "50%",
+                    transform: "translate(-50%, -50%)",
+                    animationName: "none",
+                  }
+                : null),
             }}
             onClick={() => onCatch(h.id)}
-            onAnimationEnd={() => onMiss(h.id)}
+            onAnimationEnd={h.static ? undefined : () => onMiss(h.id)}
             aria-label="Coração"
             type="button"
           >
-            ❤️
+            💛 
           </button>
         ))}
 
@@ -135,12 +259,12 @@ export default function Game() {
             {status === "won" ? (
               <div className="panel">
                 <h2>Ganhaste! 💘</h2>
-                <p>Ok… agora podes abrir a surpresa final.</p>
+                <p>Ok… agora tens mais dois jogos antes do final.</p>
                 <div className="row">
-                  <button className="btn" onClick={() => navigate("/final")}>
-                    Abrir surpresa
+                  <button className="btn btn--primary" onClick={() => navigate("/connections")}>
+                    Próximo jogo
                   </button>
-                  <button className="btn ghost" onClick={reset}>
+                  <button className="btn btn--ghost" onClick={reset}>
                     Jogar outra vez
                   </button>
                 </div>
@@ -150,10 +274,10 @@ export default function Game() {
                 <h2>Quase! 😄</h2>
                 <p>Tenta outra vez para desbloquear a surpresa.</p>
                 <div className="row">
-                  <button className="btn" onClick={reset}>
+                  <button className="btn btn--primary" onClick={reset}>
                     Tentar outra vez
                   </button>
-                  <button className="btn ghost" onClick={() => navigate("/")}>
+                  <button className="btn btn--ghost" onClick={() => navigate("/")}>
                     Voltar ao início
                   </button>
                 </div>

@@ -29,6 +29,8 @@ export default function Home() {
         </div>
 
         <nav className="home__nav">
+          <Link className="home__link" to="/reasons">Razões</Link>
+          <span className="home__dot">•</span>
           <Link className="home__link" to="/timeline">Timeline</Link>
           <span className="home__dot">•</span>
           <Link className="home__link" to="/gallery">Galeria</Link>

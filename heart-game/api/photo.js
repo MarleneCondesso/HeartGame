@@ -3,18 +3,25 @@ import process from "process";
 import { Buffer } from "buffer";
 
 export default async function handler(req, res) {
+  if (req.method !== "GET") return res.status(405).send("Method not allowed");
+
   const token = req.cookies?.[COOKIE_NAME];
 
   if (!verifySessionToken(token, process.env.AUTH_SECRET)) {
     return res.status(401).send("Unauthorized");
   }
 
-  const id = req.query?.id;
+  const id = typeof req.query?.id === "string" ? req.query.id : "";
   if (!id || !process.env.PRIVATE_PHOTO_MAP_JSON) {
     return res.status(400).send("Bad request");
   }
 
-  const map = JSON.parse(process.env.PRIVATE_PHOTO_MAP_JSON);
+  let map;
+  try {
+    map = JSON.parse(process.env.PRIVATE_PHOTO_MAP_JSON);
+  } catch {
+    return res.status(500).send("Invalid configuration");
+  }
   const blobUrl = map[id];
 
   if (!blobUrl) return res.status(404).send("Not found");
@@ -26,7 +33,7 @@ export default async function handler(req, res) {
   const buf = Buffer.from(await upstream.arrayBuffer());
 
   res.setHeader("Content-Type", contentType);
-  res.setHeader("Cache-Control", "private, max-age=3600");
+  res.setHeader("Cache-Control", "private, no-store");
 
   return res.status(200).send(buf);
 }

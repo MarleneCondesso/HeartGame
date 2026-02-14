@@ -8,7 +8,7 @@ export default function TopBar() {
   return (
     <div className="topbar">
       <Link className="topbar__brand" to="/">
-        💝 {content.product?.name || "LoveCard"}
+        💛  {content.product?.name || "LoveCard"}
       </Link>
 
       <div className="topbar__right">

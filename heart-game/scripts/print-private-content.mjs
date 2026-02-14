@@ -1,0 +1,38 @@
+import fs from "node:fs/promises";
+import path from "node:path";
+
+const file = path.resolve(process.cwd(), "private-content.json");
+
+async function main() {
+  let raw;
+  try {
+    raw = await fs.readFile(file, "utf8");
+  } catch {
+    console.error("❌ Ficheiro não encontrado:", file);
+    console.error("Cria `private-content.json` (este ficheiro é ignorado pelo git).");
+    process.exit(1);
+  }
+
+  let data;
+  try {
+    data = JSON.parse(raw);
+  } catch (err) {
+    console.error("❌ JSON inválido em:", file);
+    console.error(String(err));
+    process.exit(1);
+  }
+
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    console.error("❌ O conteúdo deve ser um objeto JSON no topo.");
+    process.exit(1);
+  }
+
+  console.log("COPIA ISTO PARA PRIVATE_CONTENT_JSON:");
+  console.log(JSON.stringify(data));
+}
+
+main().catch((err) => {
+  console.error("❌ Erro:", err);
+  process.exit(1);
+});
+

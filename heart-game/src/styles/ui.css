@@ -5,14 +5,20 @@
   border-radius: 14px;
   text-decoration: none;
   color: inherit;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  background: rgba(255, 255, 255, 0.06);
   cursor: pointer;
   transition: transform 120ms ease, background 120ms ease, opacity 120ms ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.btn:hover {
-  transform: translateY(-1px);
+@media (hover: hover) and (pointer: fine) {
+  .btn:hover {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.10);
+    border-color: rgba(255, 255, 255, 0.26);
+  }
 }
 
 .btn:disabled {
@@ -22,7 +28,10 @@
 }
 
 .btn--primary {
-  background: rgba(255, 255, 255, 0.18);
+  background: var(--accent-gradient);
+  border-color: rgba(255, 255, 255, 0.30);
+  color: #0b0b10;
+  font-weight: 650;
 }
 
 .btn--ghost {
@@ -33,8 +42,26 @@
 .badge {
   padding: 6px 10px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: linear-gradient(
+    135deg,
+    rgba(var(--sofia-rgb), 0.12),
+    rgba(var(--matcha-rgb), 0.10)
+  );
   font-size: 12px;
   opacity: 0.9;
+}
+
+/* Evita "hover preso" em touch */
+@media (hover: none) and (pointer: coarse) {
+  .photoCard:hover,
+  .option:hover,
+  .reasonCard:hover,
+  .timelineCard__content:hover {
+    transform: none !important;
+  }
+
+  .photoCard:hover .photoCard__overlay {
+    opacity: 0 !important;
+  }
 }

@@ -4,7 +4,7 @@ import { useContent } from "../context/ContentContext";
 import "./Reasons.css";
 
 export default function Reasons() {
-  const { content } = useContent();
+  const { mode, content } = useContent();
   const reasonsData = content.reasons || [];
 
   const [revealed, setRevealed] = useState(() => new Set());
@@ -22,15 +22,18 @@ export default function Reasons() {
     });
   };
 
-  const revealRandom = () => {
+  const revealNext = () => {
     if (!total) return;
 
-    const hidden = [];
-    for (let i = 0; i < total; i++) if (!revealed.has(i)) hidden.push(i);
+    let pick = null;
+    for (let i = 0; i < total; i++) {
+      if (!revealed.has(i)) {
+        pick = i;
+        break;
+      }
+    }
 
-    const pick = hidden.length
-      ? hidden[Math.floor(Math.random() * hidden.length)]
-      : Math.floor(Math.random() * total);
+    if (pick === null) return;
 
     setRandomPick(pick);
     setRevealed((prev) => new Set(prev).add(pick));
@@ -55,10 +58,20 @@ export default function Reasons() {
           <p className="reasons__subtitle">
             {revealedCount}/{total} reveladas
           </p>
+          {mode === "demo" && (
+            <p className="reasons__note">
+              Razões de demonstração — faz login para ver as reais.
+            </p>
+          )}
         </div>
 
         <div className="reasons__headerActions">
-          <button className="btn btn--primary" onClick={revealRandom} type="button">
+          <button
+            className="btn btn--primary"
+            onClick={revealNext}
+            type="button"
+            disabled={total > 0 && revealedCount >= total}
+          >
             Revelar uma ✨
           </button>
           <button className="btn btn--ghost" onClick={revealAll} type="button">

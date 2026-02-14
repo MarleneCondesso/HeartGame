@@ -1,16 +1,26 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
+import { Capacitor } from "@capacitor/core";
+import { BrowserRouter, HashRouter } from "react-router-dom";
 import App from "./App.jsx";
 import { ContentProvider } from "./context/ContentContext.jsx";
 import "./index.css";
 
+const isNative = Capacitor.isNativePlatform();
+const Router = isNative ? HashRouter : BrowserRouter;
+
+if (!isNative && import.meta.env.PROD && "serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").catch(() => {});
+  });
+}
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <Router>
       <ContentProvider>
         <App />
       </ContentProvider>
-    </BrowserRouter>
+    </Router>
   </React.StrictMode>
 );

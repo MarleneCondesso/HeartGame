@@ -22,7 +22,7 @@ export default function Timeline() {
         <div>
           <p className="timeline__kicker">🗓️</p>
           <h1 className="timeline__title">Timeline</h1>
-          <p className="timeline__subtitle">Alguns momentos nossos.</p>
+          <p className="timeline__subtitle">Alguns momentos nossos importantes.</p>
         </div>
 
         <div className="timeline__headerActions">
